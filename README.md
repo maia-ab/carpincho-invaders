@@ -1,10 +1,12 @@
-# Nombre del juego (<- borrar y completar)
+# Carpichos Invader
 
 ## Equipo de desarrollo
 
-- Alguien
-- Persona
-- etc.
+- Maia Barrionuevo
+- Juan Manuel Britez
+- Elizabeth Albornos
+- Martin Orsingher
+- Sebastian Di Tucci
 
 ## Capturas
 
@@ -17,6 +19,6 @@
 
 ## Otros
 
-- Curso/Facultad
-- Versión de wollok
-- Una vez terminado, no tenemos problemas en que el repositorio sea público / queremos manternerlo privado
+- Programacion con Objetos 1 comision 2 Universidad Nacional de Hurlingham
+- Versión de wollok 3.0.0
+- Una vez terminado, no tenemos problemas en que el repositorio sea público
