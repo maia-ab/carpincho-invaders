@@ -17,11 +17,12 @@ object spaceInvaders {
 	keyboard.space().onPressDo{bala.disparar()}
   }
 }
+
 object player {
 	var property x = 5
 	var property y = 0
 	var property position = game.at(x,y)
-	var property image = "img/nave.png"
+	var property image = "pepita.png"
 	method moveteDerecha(){
 		x=x+1
 		position = game.at(x,y)
@@ -31,18 +32,88 @@ object player {
 		x=x-1
 		position = game.at(x,y)
 	}
-	
 	method disparar(){
 		bala.disparar()
 	}
 	
 }
+
+class Enemies{
+	var property x
+	var property y 
+	var property position = game.at(x,y)
+		var property image= "alien.png"
+	var property direccion = null
+		
+	method moveteDerecha(){
+		direccion = "derecha"
+		x=x+1
+		position = game.at(x,y)
+	}
+	
+	method moveteIzquierda(){
+		direccion = "izquierda"
+		x=x-1
+		position = game.at(x,y)
+	}
+	
+	method moveteAbajo(){
+		y=y-1
+		position = game.at(x,y)
+	}
+	
+	method patrullarDerecha(){
+		game.onTick(1000,"MovimientoDeAlien",{self.moveteDerecha()})
+	}
+	
+	method patrullarIzquierda(){
+		game.onTick(1000,"MovimientoDeAlien",{self.moveteIzquierda()})
+	}
+	
+	method cambiarDireccion(){
+		self.dejarDeMover()
+		self.moveteAbajo()
+		if (direccion == "derecha"){self.patrullarIzquierda()}
+		else {self.patrullarDerecha()}
+	}
+	
+	method dejarDeMover(){
+		game.removeTickEvent("MovimientoDeAlien")
+	}
+	
+	method mover(){
+		self.patrullarDerecha()
+		game.onTick(7000, "patrullar", {self.cambiarDireccion()})
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	method desaparecer(){
+		image="img/bichito12.png"
+		game.removeVisual(self)
+		
+	}
+	
+}
+class Bloque{
+	var property position
+	var property image= "img/bichito11.png"
+}
+
 object bala {
 	var property position = game.at(player.x(),player.y()+1)
 	var property image
 	method disparar(){
-		image= "img/bala.png"
-		game.whenCollideDo(spaceInvaders.enemies(),{self.desaparecer()})
+		image= "pepita.png"
+		// game.whenCollideDo(spaceInvaders.enemies(),{self.desaparecer()})
 	}
 	method moverArriba(){
 	 self.position(self.position().up(1))
@@ -53,31 +124,4 @@ object bala {
 	method desaparecer(){
 		game.removeVisual(self)
 	}
-}
-class Enemies{
-	var property x
-	var property y 
-	var property position = game.at(x,y)
-		var property image= "img/bichito11.png"
-	method moveteDerecha(){
-		x=x+1
-		position = game.at(x,y)
-	}
-	
-	method moveteIzquierda(){
-		x=x-1
-		position = game.at(x,y)
-	}
-	method mover(){
-		game.onTick(2000,"Enemy1",{self.moveteDerecha()})
-	}
-	method desaparecer(){
-		image="img/bichito12.png"
-		game.removeVisual(self)
-		
-	}
-}
-class Bloque{
-	var property position
-	var property image= "img/bichito11.png"
 }
