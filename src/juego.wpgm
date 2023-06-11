@@ -5,8 +5,8 @@ program carpinchosInvaders {
 	juego.iniciar()
 }
 
-/* 
-import pepita.*
+//ARCHIVO BASE
+/* import pepita.*
 program juego {
 	game.title("Juego Base")
 	game.width(11)
@@ -21,7 +21,7 @@ program juego {
     spaceInvaders.enemies().add(enemy3)
     game.addVisual(enemy1)
     game.addVisual(enemy2)
-    game.addVisual(enemy3)
+    game.addVisual(enemy3)  
 	enemy1.mover()
 	enemy2.mover()
 	enemy3.mover()

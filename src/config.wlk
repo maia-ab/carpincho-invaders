@@ -1,6 +1,6 @@
 import wollok.game.*
 import juego.*
-//import portadas.*
+import portadas.*
 
 object juego {
 	method iniciar(){
@@ -9,39 +9,38 @@ object juego {
 	}
 	
 	method config(){
-		self.ejecutarInicio()
-		self.ejecutarPortadas()
-		self.ejecutarPersonaje()
-		self.ejecutarInvasores()
+		self.configInicio()
+		self.configPersonaje()
+		self.configInvasores()
 		self.ejecutarObjetos()
+		inicio.ejecutar()
 	}
 	
-	method ejecutarInicio(){
+	method configInicio(){
+		//game.boardGround("arena.png")
 		game.title("Carpinchos Invaders")
 		game.width(30)
 		game.height(20)
 		game.cellSize(32)
 	}
 	
-	method ejecutarPortadas(){
-		/*game.addVisual(inicio)
-		keyboard.enter().onPressDo{}
-		game.removeVisual(inicio)*/
-		
-		//-----game.addVisual(gameOver)
-	}
-	
-	method ejecutarPersonaje(){
-		game.addVisual(jugador)
+	method configPersonaje(){
+		/*game.addVisual(jugador)
 		keyboard.left().onPressDo{jugador.mover(izquierda)}
 		keyboard.right().onPressDo{jugador.mover(derecha)}
-		keyboard.space().onPressDo{jugador.disparar()}
+		keyboard.space().onPressDo{jugador.disparar()}*/
+		jugador.iniciar()
 	}
 	
-	method ejecutarInvasores(){
-		//lo tengo que corregir jsjsj
-		const enemigo1 = new Enemigo(x=3, y=18)
-		const enemigo2 = new Enemigo(x=6,y=18)
+	method configInvasores(){
+		const enemigo1 = new Enemigo()
+		enemigo1.iniciar()
+		
+		
+		//invasion.colocarEnemigos() --> Es del forEach
+		
+		
+		/*const enemigo2 = new Enemigo(x=6,y=18)
 		const enemigo3 = new Enemigo(x=9,y=18)
 		const enemigo4 = new Enemigo(x=12,y=18)
 		const enemigo5 = new Enemigo(x=3,y=16)
@@ -63,7 +62,7 @@ object juego {
 		enemigo5.mover()
 		enemigo6.mover()
 		enemigo7.mover()
-		enemigo8.mover()
+		enemigo8.mover()*/
     	/*game.whenCollideDo(enemigo1, {disparo => disparo.desaparecer()
 		enemigo1.recibirDisparo()})
 		game.whenCollideDo(enemigo2, {disparo => disparo.desaparecer()
@@ -73,6 +72,7 @@ object juego {
 	}
 	
 	method ejecutarObjetos(){
+		//arbustos.colocarArbustos() --> Es del forEach
 		const arb1 = new Arbusto(x=2, y=2)
 		const arb2 = new Arbusto(x=8, y=2)
 		const arb3 = new Arbusto(x=14, y=2)
@@ -82,6 +82,6 @@ object juego {
 		game.addVisual(arb2)
 		game.addVisual(arb3)
 		game.addVisual(arb4)
-		game.addVisual(arb5)
+		game.addVisual(arb5) 
 	}
 }
