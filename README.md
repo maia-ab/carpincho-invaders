@@ -1,4 +1,5 @@
 # Carpichos Invader
+![logo](assets/carpinchos invaders.png)
 
 ## Equipo de desarrollo
 
@@ -8,9 +9,9 @@
 - Martin Orsingher
 - Sebastian Di Tucci
 
-## Capturas
-
-(agregar)
+## Introducción
+Inspirado en Space Invaders, Carpinchos Invaders es un juego de estrategia basados en diferentes rondas de niveles cada vez mas complejos.
+El objetivo principal es evitar la invasion de los carpinchos hacia la casa de (nombre de un personaje).
 
 ## Reglas de Juego / Instrucciones
 
