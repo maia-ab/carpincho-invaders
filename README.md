@@ -1,5 +1,5 @@
-# Carpichos Invader
-![logo](assets/carpinchos invaders.png)
+#**Carpichos Invader**
+![logo](/assets/carpinchos invaders.png)
 
 ## Equipo de desarrollo
 
