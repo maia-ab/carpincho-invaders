@@ -194,21 +194,20 @@ object abajo{
 }
 object izquierda{
 	method moverA(personaje){
+		personaje.position(personaje.position().left(1))
 		personaje.x(personaje.x()-1)
 		if(personaje.x()<0){
-			personaje.position(game.at(30,0))
 			personaje.x(30)
-		}else{
-			personaje.position(personaje.position().left(1))
-		}
+			personaje.position(personaje.position().right(30))}
 	}
+	
 }
 object derecha{
 	method moverA(personaje){
 		personaje.position( personaje.position().right(1))
 		personaje.x(personaje.x()+1)
 		if(personaje.x()>=30){
-				personaje.position(game.at(0,0))
+				personaje.position(personaje.position().left(30))
 				personaje.x(0)
 			}
 	}
