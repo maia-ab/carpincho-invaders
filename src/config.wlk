@@ -73,15 +73,15 @@ object juego {
 	
 	method ejecutarObjetos(){
 		//arbustos.colocarArbustos() --> Es del forEach
-		const arb1 = new Arbusto(x=2, y=2)
-		const arb2 = new Arbusto(x=8, y=2)
-		const arb3 = new Arbusto(x=14, y=2)
-		const arb4 = new Arbusto(x=20, y=2)
-		const arb5 = new Arbusto(x=26, y=2)
-		game.addVisual(arb1)
-		game.addVisual(arb2)
-		game.addVisual(arb3)
-		game.addVisual(arb4)
-		game.addVisual(arb5) 
+		const arb1 = new Arbusto(position = game.at(2,2))
+		const arb2 = new Arbusto(position = game.at(8,2))
+		const arb3 = new Arbusto(position = game.at(14,2))
+		const arb4 = new Arbusto(position = game.at(20,2))
+		const arb5 = new Arbusto(position = game.at(26,2))
+		arb1.iniciar()
+		arb2.iniciar() 
+		arb3.iniciar() 
+		arb4.iniciar() 
+		arb5.iniciar() 
 	}
 }

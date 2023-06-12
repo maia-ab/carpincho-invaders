@@ -147,10 +147,17 @@ class Disparo{
 
 
 class Arbusto{
-	var property y
-	var property x 
+	var property vidas = 5
 	var property image = "cesped64px.png"
-	var property position = game.at(x,y)
+	var property position
+	method recibirDisparo(){
+		if(vidas == 1){game.removeVisual(self)}
+		else{vidas -= 1}
+	}
+	method iniciar(){
+		game.addVisual(self)
+		game.onCollideDo(self, {x => self.recibirDisparo()})
+	}
 	
 	//--------------------------------------------------------------
 	/* var property x = null
