@@ -41,8 +41,8 @@ class Personaje{
 	//var property y 
 	//var property position = game.at(x, y)
 	//method puedeMover(pos) = pos.x().between(0, 30) and pos.y().between(0, 30)
-	var property x = null 
-	var property position = null
+	var property x = 5 
+	var property position = 0
 	var property image
 	var property vidas
 	method iniciar(){game.addVisual(self)}
@@ -135,11 +135,11 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 
 class Disparo{
 	//var property x
-	//var property y 
-	/* method desaparecer(){game.removeVisual(self)} 
-	method serDisparadaPor(personaje){personaje.disparar()}*/
+	var property y=1
 	var property image = "pepita.png"
 	var property position = null
+	method desaparecer(){game.removeVisual(self)} 
+	/*method serDisparadaPor(personaje){personaje.disparar()}*/
 	method mover(dir){dir.moverA(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())}
 }
@@ -187,13 +187,22 @@ object abajo{
 }
 object izquierda{
 	method moverA(personaje){
-		personaje.position( personaje.position().left(1))
 		personaje.x(personaje.x()-1)
+		if(personaje.x()<0){
+			personaje.position(game.at(30,0))
+			personaje.x(30)
+		}else{
+			personaje.position(personaje.position().left(1))
+		}
 	}
 }
 object derecha{
 	method moverA(personaje){
 		personaje.position( personaje.position().right(1))
 		personaje.x(personaje.x()+1)
+		if(personaje.x()>=30){
+				personaje.position(game.at(0,0))
+				personaje.x(0)
+			}
 	}
 }
