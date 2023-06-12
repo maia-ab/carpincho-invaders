@@ -33,10 +33,16 @@ object juego {
 	}
 	
 	method configInvasores(){
-		const enemigo1 = new Enemigo()
-		enemigo1.iniciar()
-		
-		
+		const enemigo1 = new Enemigo(position = game.at(3, 11))
+		const enemigo2 = new Enemigo(position = game.at(3, 12))
+		const enemigo3 = new Enemigo(position = game.at(5, 11))
+		const enemigo4 = new Enemigo(position = game.at(5, 12))
+		const enemigo5 = new Enemigo(position = game.at(7, 11))
+		const enemigo6 = new Enemigo(position = game.at(7, 12))
+		const enemigo7 = new Enemigo(position = game.at(1, 11))
+		const enemigo8 = new Enemigo(position = game.at(1, 12))
+		const enemigos=[enemigo1,enemigo2,enemigo3,enemigo4,enemigo5,enemigo6,enemigo7,enemigo8]
+		enemigos.forEach({x=>x.iniciar()})	
 		//invasion.colocarEnemigos() --> Es del forEach
 		
 		
@@ -69,7 +75,7 @@ object juego {
 		enemigo2.recibirDisparo()})
 		game.whenCollideDo(enemigo3, {disparo => disparo.desaparecer()
 		enemigo3.recibirDisparo()})*/
-	}
+}
 	
 	method ejecutarObjetos(){
 		//arbustos.colocarArbustos() --> Es del forEach

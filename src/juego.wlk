@@ -10,7 +10,7 @@ class Nivel {
   	//const arbustosNivel1 = new Arbusto(arbustos = [arbusto])
   	//arbustos.colocarArbustos() --> Esto funciona pero los pone uno al lado del otro 
   	
-  	const enemigo = new Enemigo(position = game.at(5, 11))
+  	const enemigo = new Enemigo(position = game.at(0, 11))
   	const invasionNivel = new Invasion(invasores = [enemigo])
   	//invasion.colocarEnemigos() --> Esto funciona pero los pone uno al lado del otro 
   	
@@ -41,7 +41,7 @@ class Personaje{
 	//var property y 
 	//var property position = game.at(x, y)
 	//method puedeMover(pos) = pos.x().between(0, 30) and pos.y().between(0, 30)
-	var property x = 5 
+	//var property x = 5 
 	var property position = 0
 	var property image
 	var property vidas
@@ -58,9 +58,9 @@ class Personaje{
 	method disparar()
 }
 
-class Enemigo inherits Personaje (vidas = 1, position = game.at(5, 11), image = "carpincho.png"){
+class Enemigo inherits Personaje (vidas = 1, image = "carpincho.png"){
 	//var property imagen = "carpincho.png"
-	//var property direccion = derecha
+	var property direccion = derecha
 	//override method iniciar(){}
 	/*override method disparar(){
 		const disp = new Disparo(x = self. x(), y = self.y()+1)
@@ -71,6 +71,7 @@ class Enemigo inherits Personaje (vidas = 1, position = game.at(5, 11), image = 
 	override method iniciar(){
 		super()
 		game.onCollideDo(self, {x => self.recibirDisparo()})
+		self.mover()
 	}
 	override method disparar(){}
 	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
@@ -80,9 +81,9 @@ class Enemigo inherits Personaje (vidas = 1, position = game.at(5, 11), image = 
 	}
 	
 //CODIGO DE PATRULLA DE LOS ENEMIGOS	
-	/*method mover(){
+	method mover(){
 		self.patrullarDerecha()
-		game.onTick(7000, "patrullar", {self.cambiarDireccion()})
+		game.onTick(20000, "patrullar", {self.cambiarDireccion()})
 	}
 	method patrullarDerecha(){
 		//game.onTick(1000,"MovimientoDeAlien",{self.moveteDerecha()})
@@ -96,13 +97,18 @@ class Enemigo inherits Personaje (vidas = 1, position = game.at(5, 11), image = 
 	}
 	method cambiarDireccion(){
 		self.dejarDeMover()
-		self.mover(abajo)
-		if (direccion.equals(derecha)){self.patrullarIzquierda()}
-		else {self.patrullarDerecha()}
+		abajo.moverA(self)
+		if (direccion.equals(derecha)){
+			self.patrullarIzquierda()
+			direccion=izquierda	
+		}
+		else {self.patrullarDerecha()
+			  direccion=derecha
+		}
 	}
 	method dejarDeMover(){
 		game.removeTickEvent("Movimiento")
-	}*/
+	}
 }
 
 object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png"){
@@ -118,6 +124,8 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 		game.addVisual(disp)
 		disp.colocarEn(self.position().up(1))
 		game.onTick(100, "desplazarArriba", {disp.mover(arriba)})
+		game.schedule(2000, {disp.desaparecer()})
+		disp.colisionar()
 	}
 	override method iniciar(){
 		super()
@@ -135,13 +143,17 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 
 class Disparo{
 	//var property x
-	var property y=1
+	//var property y=1
 	var property image = "disparo.png"
 	var property position = null
 	method desaparecer(){game.removeVisual(self)} 
 	/*method serDisparadaPor(personaje){personaje.disparar()}*/
 	method mover(dir){dir.moverA(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())}
+	method colisionar() {
+	game.onCollideDo(self, {x => x.recibirDisparo()
+	self.desaparecer()})
+}
 }
 
 
@@ -182,33 +194,29 @@ object arbustos{
 object arriba{
 	method moverA(personaje){
 		personaje.position( personaje.position().up(1))
-		personaje.y(personaje.y()+1)
 	}
 }
 
 object abajo{
 	method moverA(personaje){
 		personaje.position( personaje.position().down(1))
-		personaje.y(personaje.y()-1)
 	}
 }
 object izquierda{
 	method moverA(personaje){
-		personaje.position(personaje.position().left(1))
-		personaje.x(personaje.x()-1)
-		if(personaje.x()<0){
-			personaje.x(30)
-			personaje.position(personaje.position().right(30))}
+		if(personaje.position().x()-1<0){
+			personaje.position(game.at(30,0))
+			}
+			personaje.position(personaje.position().left(1))
 	}
 	
 }
 object derecha{
 	method moverA(personaje){
-		personaje.position( personaje.position().right(1))
-		personaje.x(personaje.x()+1)
-		if(personaje.x()>=30){
-				personaje.position(personaje.position().left(30))
-				personaje.x(0)
+		if(personaje.position().x()+1>29){
+				personaje.position(game.at(0,0))
+			}else{
+				personaje.position( personaje.position().right(1))
 			}
 	}
 }
