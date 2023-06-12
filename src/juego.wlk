@@ -136,7 +136,7 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 class Disparo{
 	//var property x
 	var property y=1
-	var property image = "pepita.png"
+	var property image = "disparo.png"
 	var property position = null
 	method desaparecer(){game.removeVisual(self)} 
 	/*method serDisparadaPor(personaje){personaje.disparar()}*/
