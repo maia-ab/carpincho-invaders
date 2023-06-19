@@ -3,30 +3,4 @@ import config.*
 
 program carpinchosInvaders {
 	juego.iniciar()
-}
-
-//ARCHIVO BASE
-/* import pepita.*
-program juego {
-	game.title("Juego Base")
-	game.width(11)
-	game.height(11)
-	game.cellSize(32)
-	const enemy1= new Enemies(x=0,y=10)
-	const enemy2= new Enemies(x=2,y=10)
-	const enemy3= new Enemies(x=4,y=10)
-    game.addVisual(player)
-    spaceInvaders.enemies().add(enemy1)
-    spaceInvaders.enemies().add(enemy2)
-    spaceInvaders.enemies().add(enemy3)
-    game.addVisual(enemy1)
-    game.addVisual(enemy2)
-    game.addVisual(enemy3)  
-	enemy1.mover()
-	enemy2.mover()
-	enemy3.mover()
-	keyboard.left().onPressDo{player.moveteIzquierda()}
-	keyboard.right().onPressDo{player.moveteDerecha()}
-	keyboard.space().onPressDo{bala.disparar()}
-	game.start()
-}*/
+} 
