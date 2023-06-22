@@ -2,6 +2,8 @@ import wollok.game.*
 import portadas.*
 import music.*
 
+/*AAAAAAAA */
+
 /*ESTA CLASE NO LA ESTAMOS USANDO, capaz nos conviene hacerla en archivo aparte
 class Nivel {
   method iniciar(){
@@ -104,15 +106,10 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 	override method iniciar(){self.configurarAcciones()}*/
 	override method disparar(){
 		const disp = new Disparo()
-		game.addVisual(disp)
-		disp.colocarEn(self.position().up(1))
-		game.onTick(100, "desplazarArriba", {disp.mover(arriba)})
-		game.schedule(2000, {disp.desaparecer()})
-		disp.colisionar()
+		disp.serDisparadoPor(self)
 	}
 	override method iniciar(){
 		super()
-		game.onCollideDo(self, {x => self.recibirDisparo()})
 		self.configurarAcciones()
 	}
 	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
@@ -123,6 +120,8 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 		keyboard.up().onPressDo{self.decirVidas()}
 	}
 }
+
+
 
 //object invasion --> para el forEach
 object invasion{
@@ -145,21 +144,29 @@ object invasion{
 	}
 }
 
+
 class Disparo{
 	//var property x
 	//var property y=1
-	/*method serDisparadaPor(personaje){personaje.disparar()}*/
 	var property image = "disparo.png"
 	var property position = null
-	
-	method desaparecer(){game.removeVisual(self)} 
+	//method serDisparadaPor(personaje){personaje.disparar()}/
 	method mover(dir){dir.moverA(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())}
-	method colisionar() {
-		game.onCollideDo(self, {x => x.recibirDisparo()
-		self.desaparecer()})
+	method detenerDisparo(){
+		game.removeVisual(self)
+		game.removeTickEvent("desplazarArriba")
 	}
+	method serDisparadoPor(personaje){
+		game.addVisual(self)
+		self.colocarEn(personaje.position().up(1))
+		game.onTick(100, "desplazarArriba", {self.mover(arriba)})
+		game.onCollideDo(self, {x => x.recibirDisparo() self.detenerDisparo()})
+	
+	}
+
 }
+
 
 class Arbusto{
 	const property arbustos = []
@@ -197,39 +204,43 @@ class Arbusto{
 
 //MOVIMIENTOS
 object arriba{
+	method puedeMoverse(personaje) = personaje.position().y()+1 < game.height()
 	method moverA(personaje){
-		if ((personaje.position().y()+1) > game.height()){
-			game.removeVisual(personaje)}
-		else{
+		if (not self.puedeMoverse(personaje)){
+			game.removeVisual(personaje)
+			game.removeTickEvent("desplazarArriba")
+		}else{
 			personaje.position(personaje.position().up(1))
 		}
 	}
 }
 
+
 object abajo{
+	method puedeMoverse(personaje) = personaje.position().y()-1 > -1
 	method moverA(personaje){
 		personaje.position( personaje.position().down(1))
-		personaje.y(personaje.y()-1)
 	}
 }
-
-
 object izquierda{
+    method puedeMoverse(personaje) = personaje.position().x()-1 > -1	
 	method moverA(personaje){
-		if ((personaje.position().x()-1) < 0){
-			personaje.position(game.at(29,0))}
-		else{
+		if(not self.puedeMoverse(personaje)){
+			personaje.position(game.at(game.width() ,0))
+			}
 			personaje.position(personaje.position().left(1))
-		}
+	}
+	
+}
+object derecha{
+	method puedeMoverse(personaje) = personaje.position().x()+1 < game.width()
+	method moverA(personaje){
+		if (not self.puedeMoverse(personaje)){
+				personaje.position(game.at(0,0))
+			}else{
+				personaje.position( personaje.position().right(1))
+			}
 	}
 }
 
-object derecha{
-	method moverA(personaje){
-		if (personaje.position().x()+1 > 29){
-				personaje.position(game.at(0,0))}
-		else{
-			personaje.position(personaje.position().right(1))
-		}
-	}
-}
+
