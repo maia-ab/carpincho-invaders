@@ -27,7 +27,7 @@ object menu inherits Visual(image = "menu.png"){
 	override method ejecutar(){
 		super()
 		soundPrincipal.play()
-		keyboard.enter().onPressDo{self.remover()}
+		keyboard.enter().onPressDo{self.remover() invasion.atacar()} //CAMBIO
 		keyboard.a().onPressDo({self.setting()})
 	}
 	method setting(){
