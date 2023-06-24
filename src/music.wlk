@@ -1,21 +1,22 @@
 import wollok.game.*
 import juego.*
+import niveles.*
 
-const musicPrincipal = game.sound("principal.mp3")
-const musicVictoria = game.sound("victoria.mp3")
-const musicGameOver = game.sound("gameOver.mp3")
-
-object sound{
-	//const property music = game.sound("principal.mp3")
-	//const property musicVictoria = game.sound("victoria.mp3")
-	//const property musicGameOver = game.sound("gameOver.mp3")
-	
-	method musicConfig(pista){
-		keyboard.p().onPressDo(
-			if(pista.paused()){pista.resume()}
-			else{pista.pause()}
-		)
-		keyboard.up().onPressDo({pista.volume(1)})
-		keyboard.down().onPressDo({pista.volume(0)})
+class Music{
+	var property music
+	method play(){
+		//music.shouldLoop(true)
+		game.schedule(500, {music.play()})
+		keyboard.p().onPressDo({music.pause()})
+		keyboard.r().onPressDo({music.resume()})
 	}
 }
+
+object soundPrincipal inherits Music(music = game.sound("principal.mp3")){
+	override method play(){
+		super()
+		music.shouldLoop(true)
+	}
+}
+object soundVictoria inherits Music(music = game.sound("victoria.mp3")){}
+object soundGameOver inherits Music(music = game.sound("gameOver.mp3")){}

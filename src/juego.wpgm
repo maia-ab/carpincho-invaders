@@ -2,6 +2,6 @@ import wollok.game.*
 import config.*
 
 program carpinchosInvaders {
-	juego.iniciar()
+	juego.iniciarJuego()
 } 
   
