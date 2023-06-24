@@ -11,7 +11,7 @@ import portadas.*
 class Arbusto{
 	const property arbustos = []
 	var property vidas
-	var property image = "arb.png"
+	var property image = "arb1.png"
 
 	method iniciar(){
 		game.addVisualIn(self, game.at(2,3))

@@ -168,10 +168,11 @@ class Disparo{
 		game.addVisual(self)
 		game.onTick(100, "desplazar" + dir, {self.mover(dir)})
 		game.onCollideDo(self, {
-		    	x => x.recibirDisparo() 
+		    	x => x.recibirDisparo()
 		    	self.detenerDisparo(dir)
 		   })
 	}
+	method recibirDisparo(){}
 	
 }
 
