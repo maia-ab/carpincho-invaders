@@ -46,23 +46,19 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 		}
 	}
 	override method recibirDisparo(){
-		if(vidas == 0){game.removeVisual(self)
-					   gameOver.ejecutar()
-					   puedeDisparar=false
+		if(vidas == 1){
+			game.removeVisual(vida1)
+			invasion.detenerAtaque()
+			game.removeVisual(self)
+			gameOver.ejecutar()
+			puedeDisparar=false
 					   
+		}else if(vidas == 2){
+			game.removeVisual(vida2)
+			vidas -=1
 		}else{
-			if(vidas==1){
-				game.removeVisual(vida1)
-				vidas -= 1
-			}else{
-				if(vidas==2){
-					game.removeVisual(vida2)
-					vidas -= 1
-				}else{
-					game.removeVisual(vida3)
-					vidas -= 1
-				}
-			}
+			game.removeVisual(vida3)
+			vidas -=1			
 		}
 	}
 	override method iniciar(){
@@ -156,6 +152,7 @@ object invasion{
 
 	//method atacar(){game.onTick(5000, "ataque", {self.disparoRandom()})}
 	method atacar(){game.onTick(2000, "ataque", {self.disparoRandom()})}
+	method detenerAtaque(){game.removeTickEvent("ataque")}
 	/* 
 	method colocarFilaDeEnemigos(y){
 		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y)))}
