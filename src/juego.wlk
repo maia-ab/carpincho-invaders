@@ -9,6 +9,7 @@ class Personaje{
 	//var property position = game.at(x, y)
 	//method puedeMover(pos) = pos.x().between(0, 30) and pos.y().between(0, 30)
 	//var property x = 5 
+	var property puedeDisparar=true
 	var property position = 0
 	var property image
 	var property vidas
@@ -24,6 +25,7 @@ class Personaje{
 	method disparar(dir)
 }
 
+
 object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png"){
 	/*override method disparar(){
 		const disp = new Disparo(x = self. x(), y = self.y()+1)
@@ -32,28 +34,57 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 		game.onTick(100, "desplazarArriba", {disp.mover(arriba)})
 	}
 	override method iniciar(){self.configurarAcciones()}*/
+	var property vida1=new Vida(position=game.at(0,19))
+	var property vida2=new Vida(position=game.at(1,19))
+	var property vida3=new Vida(position=game.at(2,19))
 	override method disparar(dir){
 		const disp = new Disparo(position = self.position().up(1))
-		disp.serDisparadoPor(self, dir)
+		if(puedeDisparar){
+			disp.serDisparadoPor(self, dir)
+			puedeDisparar=false
+			game.schedule(1500,{puedeDisparar=true})
+		}
+	}
+	override method recibirDisparo(){
+		if(vidas == 0){game.removeVisual(self)
+					   gameOver.ejecutar()
+					   puedeDisparar=false
+					   
+		}else{
+			if(vidas==1){
+				game.removeVisual(vida1)
+				vidas -= 1
+			}else{
+				if(vidas==2){
+					game.removeVisual(vida2)
+					vidas -= 1
+				}else{
+					game.removeVisual(vida3)
+					vidas -= 1
+				}
+			}
+		}
 	}
 	override method iniciar(){
 		super()
 		self.configurarAcciones()
 	}
-	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
+	//method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
 	method configurarAcciones(){
 		keyboard.left().onPressDo{self.mover(izquierda)}
 		keyboard.right().onPressDo{self.mover(derecha)}
 		keyboard.space().onPressDo{self.disparar(arriba)}
-		keyboard.up().onPressDo{self.decirVidas()}
+		game.addVisual(vida1)
+		game.addVisual(vida2)
+		game.addVisual(vida3)
+		//keyboard.up().onPressDo{self.decirVidas()}
+		
 	}
-	override method mover(dir){
-		if (self.sePuedeMoverA(dir)){
-			dir.moverA(self)
-		}else{
-			position = dir.posDeReinicio()
-		}
-	}
+}
+
+class Vida{
+	var property position
+	var property image= "vida.png"
 }
 
 class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
