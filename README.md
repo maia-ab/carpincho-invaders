@@ -19,7 +19,8 @@ Inspirado en Space Invaders, Carpinchos Invaders es un juego de estrategia basad
 - Ajustes → A
 - Pausar sonido → P
 - Reanudar sonido → R
-- Dispara → Space
+- Dispara → Espacio
+- Volver atras → Retroceso
 - Mover izquierda → Flecha izquierda
 - Mover derecha → Flecha derecha
 - Siguiente nivel → Enter
