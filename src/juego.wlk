@@ -37,6 +37,7 @@ class Personaje{
 	method moverSi(dir, condicion){
 		if(condicion){self.mover(dir)}
 	}
+	method sePuedeMoverA(dir) = dir.puedeMoverse(self)
 	method mover(dir){dir.moverA(self)}
 	method recibirDisparo(){
 		if(vidas == 1){game.removeVisual(self)}
@@ -58,26 +59,21 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	override method iniciar(){
 		super()
 		game.onCollideDo(self, {x => self.recibirDisparo()})
-		self.mover()
+		self.moverseEnGrupo()
 	}
 	override method disparar(){}
 	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
-	method configurarAcciones(){
-		keyboard.up().onPressDo{self.decirVidas()}
-		keyboard.down().onPressDo{self.recibirDisparo()}
-	}
-	
 //CODIGO DE PATRULLA DE LOS ENEMIGOS	
-	method mover(){
+	method moverseEnGrupo(){ 
 		self.patrullarDerecha()
-		game.onTick(20000, "patrullar", {self.cambiarDireccion()})
+		game.onTick(16500, "patrullar", {self.cambiarDireccion()})
 	}
 	method patrullarDerecha(){
-		game.onTick(1000,"Movimiento",{derecha.moverA(self)})
+		game.onTick(1000,"Movimiento",{self.mover(derecha)})
 		//game.onTick(1000,"MovimientoDeAlien",{self.mover(derecha)})
 	}
 	method patrullarIzquierda(){
-		game.onTick(1000,"Movimiento",{izquierda.moverA(self)})
+		game.onTick(1000,"Movimiento",{self.mover(izquierda)})
 		//game.onTick(1000,"MovimientoDeAlien",{self.mover(izquierda)})
 	}
 	method cambiarDireccion(){
@@ -95,6 +91,7 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 		game.removeTickEvent("Movimiento")
 	}
 }
+
 
 object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png"){
 	/*override method disparar(){
@@ -119,9 +116,15 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 		keyboard.space().onPressDo{self.disparar()}
 		keyboard.up().onPressDo{self.decirVidas()}
 	}
+	override method mover(dir){
+		if (self.sePuedeMoverA(dir)){
+			dir.moverA(self)
+		}else{
+			position = dir.posDeReinicio()
+		}
+	}
+
 }
-
-
 
 //object invasion --> para el forEach
 object invasion{
@@ -130,10 +133,13 @@ object invasion{
 	method iniciar(){}
 	method enemigoRandom() = invasores.get(0.randomUpTo(invasores.size()))
 	method disparoRandom(){self.enemigoRandom().disparar()}
-	method atacar(){game.onTick(5000, "ataque", {self.disparoRandom()})}
+	method atacar(){game.onTick(1000, "ataque", {self.disparoRandom()})}
 	 
-	method colocarFilaDeEnemigos(y){
-		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y)))}
+	method colocarFilaDeEnemigos(y){ 
+		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y) 
+			
+		))}
+		
 	}
 	method aniadir(invasor){invasores.add(invasor)}
 	method iniciarGrupo(){
@@ -208,11 +214,11 @@ object arriba{
 	method moverA(personaje){
 		if (not self.puedeMoverse(personaje)){
 			game.removeVisual(personaje)
-			game.removeTickEvent("desplazarArriba")
+			game.removeTickEvent("desplazarArriba") //ARREGLAR
 		}else{
 			personaje.position(personaje.position().up(1))
 		}
-	}
+	} 
 }
 
 
@@ -222,6 +228,24 @@ object abajo{
 		personaje.position( personaje.position().down(1))
 	}
 }
+
+object derecha{
+	method posDeReinicio() = game.at(0,0)
+	method puedeMoverse(personaje) = personaje.position().x()+1 < game.width()
+	method moverA(personaje){
+		personaje.position( personaje.position().right(1))
+	}
+}
+
+object izquierda{
+	method posDeReinicio() = game.at(game.width()-1,0)
+	method puedeMoverse(personaje) = personaje.position().x()-1 > -1
+	method moverA(personaje){
+		personaje.position( personaje.position().left(1))
+	}
+}
+
+/* 
 object izquierda{
     method puedeMoverse(personaje) = personaje.position().x()-1 > -1	
 	method moverA(personaje){
@@ -242,5 +266,4 @@ object derecha{
 			}
 	}
 }
-
-
+*/
