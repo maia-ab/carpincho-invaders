@@ -5,10 +5,6 @@ import niveles.*
 import visuales.*
 
 class Personaje{
-	//var property y 
-	//var property position = game.at(x, y)
-	//method puedeMover(pos) = pos.x().between(0, 30) and pos.y().between(0, 30)
-	//var property x = 5 
 	var property puedeDisparar=true
 	var property position = 0
 	var property image
@@ -27,13 +23,6 @@ class Personaje{
 
 
 object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png"){
-	/*override method disparar(){
-		const disp = new Disparo(x = self. x(), y = self.y()+1)
-		game.addVisual(disp)
-		disp.position(game.at(self.x(), disp.y()))
-		game.onTick(100, "desplazarArriba", {disp.mover(arriba)})
-	}
-	override method iniciar(){self.configurarAcciones()}*/
 	var property vida1=new Vida(position=game.at(0,19))
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
@@ -64,17 +53,18 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 	override method iniciar(){
 		super()
 		self.configurarAcciones()
+		self.mostrarVidas()
 	}
-	//method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
 	method configurarAcciones(){
 		keyboard.left().onPressDo{self.mover(izquierda)}
 		keyboard.right().onPressDo{self.mover(derecha)}
 		keyboard.space().onPressDo{self.disparar(arriba)}
+		
+	}
+	method mostrarVidas(){
 		game.addVisual(vida1)
 		game.addVisual(vida2)
-		game.addVisual(vida3)
-		//keyboard.up().onPressDo{self.decirVidas()}
-		
+		game.addVisual(vida3)		
 	}
 }
 
@@ -84,40 +74,22 @@ class Vida{
 }
 
 class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
-	//override method iniciar(){}
-	/*override method disparar(){
-		const disp = new Disparo(x = self. x(), y = self.y()+1)
-		game.addVisual(disp)
-		disp.position(game.at(self.x(), disp.y()))
-		game.onTick(100, "desplazarAbajo", {self.mover(abajo)})
-	}*/
 	var property direccion = derecha
-	
 	override method iniciar(){
 		super()
 		game.onCollideDo(self, {x => self.recibirDisparo()})
-		//self.mover()
 		self.moverseEnGrupo()
 	}
 
 	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
-	/* 
-	method configurarAcciones(){
-		keyboard.up().onPressDo{self.decirVidas()}
-		keyboard.down().onPressDo{self.recibirDisparo()}
-	}	*/
-	//method mover(){
 	method moverseEnGrupo(){
 		self.patrullarDerecha()
-		//game.onTick(20000, "patrullar", {self.cambiarDireccion()})
 		game.onTick(16500, "patrullar", {self.cambiarDireccion()})
 	}
 	method patrullarDerecha(){
-		//game.onTick(1000,"Movimiento",{derecha.moverA(self)})
 		game.onTick(1000,"Movimiento",{self.mover(derecha)})
 	}
 	method patrullarIzquierda(){
-		//game.onTick(1000,"Movimiento",{izquierda.moverA(self)})
 		game.onTick(1000,"Movimiento",{self.mover(izquierda)})
 	}
 	method cambiarDireccion(){
@@ -149,14 +121,8 @@ object invasion{
 		if(invasores.contains(enemigoQueDispare)){
 		enemigoQueDispare.disparar(abajo)}
 	}
-
-	//method atacar(){game.onTick(5000, "ataque", {self.disparoRandom()})}
 	method atacar(){game.onTick(2000, "ataque", {self.disparoRandom()})}
 	method detenerAtaque(){game.removeTickEvent("ataque")}
-	/* 
-	method colocarFilaDeEnemigos(y){
-		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y)))}
-	}*/
 	method colocarFilaDeEnemigos(y){ 
 		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y) 
 			
@@ -170,13 +136,10 @@ object invasion{
 		self.colocarFilaDeEnemigos(14)
 		invasores.forEach({x=>x.iniciar()})
 	}
-	//method estaVacia(){invasores.isEmpty()}
+	method estaVacia(){invasores.isEmpty()}
 }
 
 class Disparo{
-	//var property x
-	//var property y=1
-	//method serDisparadaPor(personaje){personaje.disparar()}
 	var property image = "disparo.png"
 	var property position 
 	method puedeMoverA(dir) = dir.puedeMoverse(self)
@@ -204,20 +167,6 @@ class Disparo{
 	
 }
 
-
-
-//MOVIMIENTOS
-/*object arriba{
-	method puedeMoverse(personaje) = personaje.position().y()+1 < game.height()
-	method moverA(personaje){
-		if (not self.puedeMoverse(personaje)){
-			game.removeVisual(personaje)
-			game.removeTickEvent("desplazarArriba") //ARREGLAR
-		}else{
-			personaje.position(personaje.position().up(1))
-		}
-	}
-}*/
 
 object arriba{
 	method puedeMoverse(personaje) = personaje.position().y()+1 < game.height()
