@@ -19,7 +19,6 @@ class Arbusto{
 	}
 	method recibirDisparoDe(personaje){
 		vidas -= 1
-		game.say(self, "tengo " + vidas + "vidas")
 		self.atacar()
 	}
 	method atacar(){
