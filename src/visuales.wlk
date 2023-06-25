@@ -15,10 +15,11 @@ class Arbusto{
 
 	method iniciar(){
 		game.addVisualIn(self, game.at(2,3))
-		game.onCollideDo(self, {x => self.recibirDisparo()})
+		game.onCollideDo(self, {x => self.recibirDisparoDe(x)})
 	}
-	method recibirDisparo(){
+	method recibirDisparoDe(personaje){
 		vidas -= 1
+		game.say(self, "tengo " + vidas + "vidas")
 		self.atacar()
 	}
 	method atacar(){

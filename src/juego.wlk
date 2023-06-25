@@ -14,7 +14,7 @@ class Personaje{
 	method moverSi(dir, condicion){if(condicion){self.mover(dir)}}
 	method sePuedeMoverA(dir) = dir.puedeMoverse(self)
 	method mover(dir){dir.moverA(self)}
-	method recibirDisparo(){
+	method recibirDisparoDe(personaje){
 		if(vidas == 1){game.removeVisual(self)}
 		else{vidas -= 1}
 	}
@@ -34,7 +34,7 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "c
 			game.schedule(1500,{puedeDisparar=true})
 		}
 	}
-	override method recibirDisparo(){
+	override method recibirDisparoDe(personaje){
 		if(vidas == 1){
 			game.removeVisual(vida1)
 			invasion.detenerAtaque()
@@ -77,10 +77,13 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	var property direccion = derecha
 	override method iniciar(){
 		super()
-		game.onCollideDo(self, {x => self.recibirDisparo()})
 		self.moverseEnGrupo()
 	}
-
+	override method recibirDisparoDe(personaje){
+		if (personaje.equals(jugador)){
+			game.removeVisual(self)
+		}
+	}
 	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
 	method moverseEnGrupo(){
 		self.patrullarDerecha()
@@ -115,7 +118,7 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 
 object invasion{
 	const property invasores = []
-	method enemigoRandom() = 0.randomUpTo(invasores.size())
+	method enemigoRandom() = 0.randomUpTo(invasores.size()-1)
 	method disparoRandom(){
 		const enemigoQueDispare = invasores.get(self.enemigoRandom())
 		if(invasores.contains(enemigoQueDispare)){
@@ -159,8 +162,11 @@ class Disparo{
 		game.addVisual(self)
 		game.onTick(100, "desplazar" + dir, {self.mover(dir)})
 		game.onCollideDo(self, {
-		    	x => x.recibirDisparo()
-		    	self.detenerDisparo(dir)
+		    	x => x.recibirDisparoDe(personaje)
+		    	if(not(invasion.invasores().contains(x))or personaje.equals(jugador)){
+		    		self.detenerDisparo(dir)
+		    	}
+		    	
 		   })
 	}
 	method recibirDisparo(){}
