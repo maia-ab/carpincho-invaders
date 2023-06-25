@@ -9,6 +9,7 @@ class Personaje{
 	var property position = 0
 	var property image
 	var property vidas
+	var property velocidadDeDisparo
 	method iniciar(){game.addVisual(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())} 
 	method moverSi(dir, condicion){if(condicion){self.mover(dir)}}
@@ -22,7 +23,7 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png"){
+object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png", velocidadDeDisparo = 150){
 	var property vida1=new Vida(position=game.at(0,19))
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
@@ -127,8 +128,8 @@ object invasion{
 	method atacar(){game.onTick(2000, "ataque", {self.disparoRandom()})}
 	method detenerAtaque(){game.removeTickEvent("ataque")}
 	method colocarFilaDeEnemigos(y){ 
-		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y) 
-			
+		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y), 
+			velocidadDeDisparo = 50
 		))}
 
 	}
@@ -160,7 +161,7 @@ class Disparo{
 	}
 	method serDisparadoPor(personaje, dir){
 		game.addVisual(self)
-		game.onTick(100, "desplazar" + dir, {self.mover(dir)})
+		game.onTick(personaje.velocidadDeDisparo(), "desplazar" + dir, {self.mover(dir)})
 		game.onCollideDo(self, {
 		    	x => x.recibirDisparoDe(personaje)
 		    	if(not(invasion.invasores().contains(x))or personaje.equals(jugador)){
@@ -169,7 +170,7 @@ class Disparo{
 		    	
 		   })
 	}
-	method recibirDisparo(){}
+	method recibirDisparoDe(personaje){}
 	
 }
 
