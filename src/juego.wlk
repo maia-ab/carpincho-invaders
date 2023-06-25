@@ -23,12 +23,12 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png", velocidadDeDisparo = 150){
+object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png", velocidadDeDisparo = 80){
 	var property vida1=new Vida(position=game.at(0,19))
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
 	override method disparar(dir){
-		const disp = new Disparo(position = self.position().up(1))
+		const disp = new Disparo(position = self.position().up(1), image = "disparo.png")
 		if(puedeDisparar){
 			disp.serDisparadoPor(self, dir)
 			puedeDisparar=false
@@ -111,7 +111,7 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 		game.removeTickEvent("Movimiento")
 	}
 	override method disparar(dir){
-		const disp = new Disparo(position = self.position().down(1))
+		const disp = new Disparo(position = self.position().down(1), image = "disparo2.png")
 		disp.serDisparadoPor(self, dir)
 	}
 }
@@ -125,11 +125,11 @@ object invasion{
 		if(invasores.contains(enemigoQueDispare)){
 		enemigoQueDispare.disparar(abajo)}
 	}
-	method atacar(){game.onTick(2000, "ataque", {self.disparoRandom()})}
+	method atacar(){game.onTick(700, "ataque", {self.disparoRandom()})}
 	method detenerAtaque(){game.removeTickEvent("ataque")}
 	method colocarFilaDeEnemigos(y){ 
 		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y), 
-			velocidadDeDisparo = 50
+			velocidadDeDisparo = 40
 		))}
 
 	}
@@ -144,7 +144,7 @@ object invasion{
 }
 
 class Disparo{
-	var property image = "disparo.png"
+	var property image 
 	var property position 
 	method puedeMoverA(dir) = dir.puedeMoverse(self)
 	method mover(dir){
