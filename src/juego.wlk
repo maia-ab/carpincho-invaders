@@ -10,6 +10,7 @@ class Personaje{
 	var property image
 	var property vidas
 	var property velocidadDeDisparo
+	var property direccionDeDisparo
 	method iniciar(){game.addVisual(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())} 
 	method moverSi(dir, condicion){if(condicion){self.mover(dir)}}
@@ -23,7 +24,7 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png", velocidadDeDisparo = 80){
+object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
 	var property vida1=new Vida(position=game.at(0,19))
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
@@ -83,8 +84,15 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	override method recibirDisparoDe(personaje){
 		if (personaje.equals(jugador)){
 			game.removeVisual(self)
+			if(invasion.invasores().size() > 0){
+				invasion.invasores().remove(self)
+			}else{
+				invasion.detenerAtaque()
+				gameOver.ejecutar() //CAMBIAR A PANTALLA DE SIGUIENTE NIVEL
+			}
 		}
 	}
+
 	method decirVidas(){game.say(self, "Tengo " + vidas + " vidas.")} 
 	method moverseEnGrupo(){
 		self.patrullarDerecha()
@@ -125,11 +133,12 @@ object invasion{
 		if(invasores.contains(enemigoQueDispare)){
 		enemigoQueDispare.disparar(abajo)}
 	}
-	method atacar(){game.onTick(700, "ataque", {self.disparoRandom()})}
+	method atacar(){game.onTick(1200, "ataque", {self.disparoRandom()})}
 	method detenerAtaque(){game.removeTickEvent("ataque")}
 	method colocarFilaDeEnemigos(y){ 
 		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y), 
-			velocidadDeDisparo = 40
+			velocidadDeDisparo = 40,
+			direccionDeDisparo = abajo
 		))}
 
 	}
@@ -140,7 +149,7 @@ object invasion{
 		self.colocarFilaDeEnemigos(14)
 		invasores.forEach({x=>x.iniciar()})
 	}
-	method estaVacia(){invasores.isEmpty()}
+	method estaVacia() = invasores.isEmpty()
 }
 
 class Disparo{
@@ -163,14 +172,18 @@ class Disparo{
 		game.addVisual(self)
 		game.onTick(personaje.velocidadDeDisparo(), "desplazar" + dir, {self.mover(dir)})
 		game.onCollideDo(self, {
-		    	x => x.recibirDisparoDe(personaje)
-		    	if(not(invasion.invasores().contains(x))or personaje.equals(jugador)){
+		    	x => if(not(invasion.invasores().contains(x))or personaje.equals(jugador)){
+		    		x.recibirDisparoDe(personaje)
 		    		self.detenerDisparo(dir)
+		    	}else{
+		    		x.recibirDisparoDe(personaje)
 		    	}
 		    	
 		   })
 	}
-	method recibirDisparoDe(personaje){}
+	method recibirDisparoDe(personaje){
+		self.detenerDisparo(personaje.direccionDeDisparo().opuesto())
+	}
 	
 }
 
@@ -180,6 +193,7 @@ object arriba{
 	method moverA(personaje){
 		personaje.position(personaje.position().up(1))
 	}
+	method opuesto() = abajo
 }
 
 object abajo{
@@ -187,6 +201,7 @@ object abajo{
 	method moverA(personaje){
 		personaje.position( personaje.position().down(1))
 	}
+	method opuesto() = arriba
 }
 
 object derecha{
@@ -195,6 +210,7 @@ object derecha{
 	method moverA(personaje){
 		personaje.position( personaje.position().right(1))
 	}
+	method opuesto() = izquierda
 }
 
 object izquierda{
@@ -203,4 +219,5 @@ object izquierda{
 	method moverA(personaje){
 		personaje.position( personaje.position().left(1))
 	}
+	method opuesto() = derecha
 }
