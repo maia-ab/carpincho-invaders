@@ -9,10 +9,14 @@ import visuales.*
 class Nivel{
 	var property image
 	var property siguiente
-	var property nroNivel
-	//var property imageNivel
 	
-	method iniciar(){game.boardGround(image)}
+	method iniciar(){
+		//game.boardGround(image)
+		game.addVisualIn(self, game.at(0,0))
+		jugador.iniciar()
+		invasion.iniciarGrupo()
+		invasion.atacar()
+	}
 	method siguienteNivel(){
 		//if(invasion.estaVacia()){
 			//game.clear() //nose
@@ -22,12 +26,9 @@ class Nivel{
 	}
 }
 
-object nivel1 inherits Nivel(image="nivel1.png", siguiente=nivel2, nroNivel = "nroNivel.png"){
+object nivel1 inherits Nivel(image="nivel1.png", siguiente=nivel2){
 	override method iniciar(){
 		super()
-		game.addVisualIn(nroNivel, game.at(1,29))
-		jugador.iniciar()
-		invasion.iniciarGrupo()
 		arbnivel1.iniciar()
 		self.siguienteNivel()
 	}
@@ -39,8 +40,8 @@ object nivel1 inherits Nivel(image="nivel1.png", siguiente=nivel2, nroNivel = "n
 		}
 	}*/
 }
-object nivel2 inherits Nivel(image="nivel2.png", siguiente=nivel3, nroNivel = "nroNivel.png"){
+object nivel2 inherits Nivel(image="nivel2.png", siguiente=nivel3){
 	override method iniciar(){}
 	override method siguienteNivel(){}
 }
-object nivel3 inherits Nivel(image="nivel3.png", siguiente=null, nroNivel = "nroNivel.png"){}
+object nivel3 inherits Nivel(image="nivel3.png", siguiente=null){}

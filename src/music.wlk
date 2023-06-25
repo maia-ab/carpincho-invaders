@@ -5,11 +5,11 @@ import niveles.*
 class Music{
 	var property music
 	method play(){
-		//music.shouldLoop(true)
 		game.schedule(500, {music.play()})
 		keyboard.p().onPressDo({music.pause()})
 		keyboard.r().onPressDo({music.resume()})
 	}
+	method stop(){music.stop()}
 }
 
 object soundPrincipal inherits Music(music = game.sound("principal.mp3")){

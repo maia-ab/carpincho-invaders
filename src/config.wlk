@@ -12,8 +12,7 @@ object juego {
 	}
 	method config(){
 		self.configVentana()
-		nivel1.iniciar()
-		//niveles.ejecutarPartida()
+		//nivel1.iniciar() ULTIMO
 		menu.ejecutar()
 		inicio.ejecutar()
 	}
