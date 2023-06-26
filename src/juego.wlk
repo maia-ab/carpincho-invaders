@@ -24,11 +24,12 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
+object jugador inherits Personaje(vidas = 30, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
 	var property vida1=new Vida(position=game.at(0,19))
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
 	var property cantidadDeDisparos = 1
+	var property puntosActuales=0
 	override method disparar(dir){
 		const disp = new Disparo(position = self.position().up(1), image = "mate.png", idDisparo = cantidadDeDisparos)
 		if(puedeDisparar){
@@ -49,16 +50,45 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		}else if(vidas == 2){
 			game.removeVisual(vida2)
 			vidas -=1
+			self.restarPuntos(100)
+			contador.actualizarPuntos()	
+			
 		}else{
 			game.removeVisual(vida3)
-			vidas -=1			
+			vidas -=1	
+			self.restarPuntos(100)
+			contador.actualizarPuntos()	
+					
 		}
 	}
 	override method iniciar(){
 		super()
 		self.configurarAcciones()
 		self.mostrarVidas()
+		self.mostrarContador()
 	}
+	override method mover(dir){
+		if (dir.puedeMoverse(self)){
+			dir.moverA(self)
+		}else{
+			position = dir.posDeReinicio()
+		}
+	}
+	method sumarPuntos(cant){
+		puntosActuales+=cant
+	}
+	method restarPuntos(cant){
+		if(puntosActuales>100){
+			puntosActuales-=100
+		}else{
+			puntosActuales=0
+		}
+	}
+	method resetear(){
+		vidas=3
+		puntosActuales=0
+	}
+	
 	method configurarAcciones(){
 		keyboard.left().onPressDo{self.mover(izquierda)}
 		keyboard.right().onPressDo{self.mover(derecha)}
@@ -70,11 +100,13 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		game.addVisual(vida2)
 		game.addVisual(vida3)		
 	}
+	method mostrarContador()=game.addVisual(contador)
 }
 
 class Vida{
 	var property position
 	var property image= "vida.png"
+	method recibirDisparoDe(personaje){}
 }
 
 class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
@@ -89,13 +121,24 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 		if (personaje.equals(jugador)){
 			game.removeVisual(self)
 			if(invasion.invasores().size()-1 > 0){
-				invasion.invasores().remove(self)
+				jugador.sumarPuntos(20)
+				contador.actualizarPuntos()
+				
 			}else{
 				invasion.detenerAtaque()
-				gameOver.ejecutar() //CAMBIAR A PANTALLA DE SIGUIENTE NIVEL
+				invasion.invasores().remove(self)
+				if(contador.nivel()==1){
+					siguienteNivel.ejecutar()
+					jugador.resetear()
+					contador.nivel(2)
+					}else{
+						victoria.ejecutar()
+					}
 			}
+		invasion.invasores().remove(self)
 		}
 	}
+	
 	method moverseEnGrupo(){
 		self.patrullarDerecha()
 		game.onTick(16500, "patrullar", {self.cambiarDireccion()})
@@ -125,6 +168,16 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 		disp.serDisparadoPor(self, dir)
 		cantidadDeDisparos += 1
 	}
+}
+object contador{
+	var property text= "puntos: " + jugador.puntosActuales().toString()
+	var property position=game.at(28,18)
+	var property textColor= "#FFFFFF"
+	var property nivel=1
+	method actualizarPuntos(){
+		text="puntos: " + jugador.puntosActuales().toString()
+	}
+	method recibirDisparoDe(personaje){}
 }
 
 
