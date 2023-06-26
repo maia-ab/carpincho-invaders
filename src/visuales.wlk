@@ -31,10 +31,6 @@ class Obstaculos{
 	}
 }
 
-<<<<<<< HEAD
-object arbNivel1 inherits Obstaculos(vidas=10){}
-object arbNivel2 inherits Obstaculos(vidas=5){}
-=======
 object arbNivel1 inherits Obstaculos(vidas=15){
 	override method iniciar(){
 		self.aniadirGrupo(2,3)
@@ -45,4 +41,3 @@ object arbNivel1 inherits Obstaculos(vidas=15){
 	}
 }
 object arbNivel2 inherits Obstaculos(vidas=10){}
->>>>>>> 87e30529d54a7b459c64ecafae4a7ee12a709e52

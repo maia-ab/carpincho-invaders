@@ -29,7 +29,6 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
 	var property cantidadDeDisparos = 1
-	var property puntosActuales=0
 	override method disparar(dir){
 		const disp = new Disparo(position = self.position().up(1), image = "mate.png", idDisparo = cantidadDeDisparos)
 		if(puedeDisparar){
@@ -50,45 +49,16 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		}else if(vidas == 2){
 			game.removeVisual(vida2)
 			vidas -=1
-			self.restarPuntos(100)
-			contador.actualizarPuntos()
-			
 		}else{
 			game.removeVisual(vida3)
-			vidas -=1
-			self.restarPuntos(100)
-			contador.actualizarPuntos()
-						
+			vidas -=1			
 		}
 	}
 	override method iniciar(){
 		super()
 		self.configurarAcciones()
 		self.mostrarVidas()
-		game.addVisual(contador)
 	}
-	override method mover(dir){
-		if (dir.puedeMoverse(self)){
-			dir.moverA(self)
-		}else{
-			position = dir.posDeReinicio()
-		}
-	}
-	method sumarPuntos(cant){
-		puntosActuales+=cant
-	}
-	method restarPuntos(cant){
-		if(puntosActuales>100){
-			puntosActuales-=100
-		}else{
-			puntosActuales=0
-		}
-	}
-	method resetear(){
-		vidas=3
-		puntosActuales=0
-	}
-	
 	method configurarAcciones(){
 		keyboard.left().onPressDo{self.mover(izquierda)}
 		keyboard.right().onPressDo{self.mover(derecha)}
@@ -98,9 +68,8 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 	method mostrarVidas(){
 		game.addVisual(vida1)
 		game.addVisual(vida2)
-		game.addVisual(vida3)
+		game.addVisual(vida3)		
 	}
-
 }
 
 class Vida{
@@ -121,55 +90,43 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 			game.removeVisual(self)
 			if(invasion.invasores().size()-1 > 0){
 				invasion.invasores().remove(self)
-				jugador.sumarPuntos(20)
-				contador.actualizarPuntos()
 			}else{
 				invasion.detenerAtaque()
-				invasion.invasores().remove(self)
-				if(contador.nivel()==1){
-					siguienteNivel.ejecutar()
-					jugador.resetear()
-					contador.nivel(2)
-					}else{
-						victoria.ejecutar()
-					}
+				gameOver.ejecutar() //CAMBIAR A PANTALLA DE SIGUIENTE NIVEL
 			}
 		}
 	}
-		override method disparar(dir){
-		const disp = new Disparo(position = self.position().down(1), image = "disparo2.png", idDisparo = "enem" + idEnemigo + cantidadDeDisparos)
-		disp.serDisparadoPor(self, dir)
-		cantidadDeDisparos+=1
-	}
 	method moverseEnGrupo(){
-		self.patrullar(direccion)
-		game.onTick(16500, "patrullar", {self.cambiarDireccion() })
+		self.patrullarDerecha()
+		game.onTick(16500, "patrullar", {self.cambiarDireccion()})
 	}
-	method patrullar(dir){
-		game.onTick(1000,"Movimiento",{self.mover(dir)})
+	method patrullarDerecha(){
+		game.onTick(1000,"Movimiento",{self.mover(derecha)})
 	}
-
+	method patrullarIzquierda(){
+		game.onTick(1000,"Movimiento",{self.mover(izquierda)})
+	}
 	method cambiarDireccion(){
 		self.dejarDeMover()
 		abajo.moverA(self)
-		direccion= direccion.opuesto()
-		self.patrullar(direccion)
+		if (direccion.equals(derecha)){
+			self.patrullarIzquierda()
+			direccion=izquierda	
+		}
+		else {self.patrullarDerecha()
+			  direccion=derecha
+		}
 	}
 	method dejarDeMover(){
 		game.removeTickEvent("Movimiento")
 	}
+	override method disparar(dir){
+		const disp = new Disparo(position = self.position().down(1), image = "disparo2.png", idDisparo = "enem" + idEnemigo + cantidadDeDisparos)
+		disp.serDisparadoPor(self, dir)
+		cantidadDeDisparos += 1
+	}
 }
 
-object contador{
-	var property text= "puntos: " + jugador.puntosActuales().toString()
-	var property position=game.at(28,18)
-	var property textColor= "#FFFFFF"
-	var property nivel=1
-	method actualizarPuntos(){
-		text="puntos: " + jugador.puntosActuales().toString()
-	}
-	method recibirDisparoDe(personaje){}
-}
 
 object invasion{
 	const property invasores = []
@@ -248,13 +205,6 @@ object abajo{
 	method puedeMoverse(personaje) = personaje.position().y()-1 > -1
 	method moverA(personaje){
 		personaje.position( personaje.position().down(1))
-	}
-	method enemigoTocaElSuelo(){
-		if(invasion.invasores().any({p=>p.position().y()==jugador.position().y()})){
-			game.clear()
-			gameOver.ejecutar()
-		}
-	
 	}
 	method opuesto() = arriba
 }
