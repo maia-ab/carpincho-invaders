@@ -26,7 +26,7 @@ Inspirado en Space Invaders, Carpinchos Invaders es un juego de estrategia basad
 - Siguiente nivel → Enter
 
 ## INSTRUCCIONES: :scroll: 
-El juego se desarrolla en 3 niveles principales donde Tony tiene que defender su hogar y proteger su nivel de vida.
+El juego se desarrolla en 2 niveles principales donde Tony tiene que defender su hogar y proteger su nivel de vida.
 A medida que avancen los niveles la dificultad será aún mayor, los obstáculos para la invasión serán cada vez menos resistentes y el ataque más rápido. 
 Si Tony pierde las vidas o no logras acabar con la invasión antes de tiempo pierdes la partida.
 
@@ -41,12 +41,6 @@ Si Tony pierde las vidas o no logras acabar con la invasión antes de tiempo pie
 Los invasores están cansados, pero aun asi siguen atacando, debes estar atento
 - Grupo de invasores → Resistencia = media
 - Arbustos → Resistencia = media
-- Tony  → Nivel de vida = 3
-
-**Nivel 3 Hogar:** :house: 
-¡Ingresaron a nuestro hogar! Pero aún no es tarde, tienes que defenderlo para lograr la victoria :1st_place_medal:
-- Grupo de invasores → Resistencia = máxima
-- Muebles → Resistencia = mínima
 - Tony  → Nivel de vida = 3
 
 ## Otros:
