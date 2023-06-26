@@ -34,5 +34,5 @@ class Obstaculos{
 	}
 }
 
-object arbNivel1 inherits Obstaculos(vidas=16){}
-object arbNivel2 inherits Obstaculos(vidas=10){}
+object arbNivel1 inherits Obstaculos(vidas=10){}
+object arbNivel2 inherits Obstaculos(vidas=5){}

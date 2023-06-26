@@ -16,20 +16,14 @@ class Nivel{
 		invasion.iniciarGrupo()
 		invasion.atacar()
 	}
-	method siguienteNivel(){
-		//if(invasion.estaVacia()){
-			//game.clear() //nose
-		//	siguiente.iniciar()
-		//}
-		//else if(jugador.vidas()== 0){gameOver.ejecutar()}
-	}
+	method siguiente()
 }
 
 object nivel1 inherits Nivel(image="nivel1.png", siguiente=nivel2){
 	override method iniciar(){
 		super()
 		arbNivel1.iniciar()
-		self.siguienteNivel()
+		self.siguiente()
 	}
 	/* 
 	override method siguienteNivel(){
@@ -39,16 +33,9 @@ object nivel1 inherits Nivel(image="nivel1.png", siguiente=nivel2){
 		}
 	}*/
 }
-object nivel2 inherits Nivel(image="nivel2.png", siguiente=nivel3){
+object nivel2 inherits Nivel(image="nivel2.png", siguiente=victoria){
 	override method iniciar(){
 		super()
-		//arbNivel2.iniciar()
-	}
-	override method siguienteNivel(){}
-}
-object nivel3 inherits Nivel(image="nivel3.png", siguiente=null){
-	override method iniciar(){
-		super()
-		//muebleNivel3.iniciar()
+		arbNivel2.iniciar()
 	}
 }
