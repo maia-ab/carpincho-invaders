@@ -100,7 +100,7 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		game.addVisual(vida2)
 		game.addVisual(vida3)		
 	}
-	method mostrarContador()=game.addVisual(contador)
+	method mostrarContador(){game.addVisual(contador)}
 }
 
 class Vida{
