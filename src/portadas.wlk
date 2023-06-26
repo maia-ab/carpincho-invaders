@@ -25,11 +25,10 @@ object menu inherits Visual(image = "menu.png"){
 		super()
 		soundPrincipal.play()
 		keyboard.enter().onPressDo{
-			game.clear()
 			nivel1.iniciar()
 			//self.remover() ULTIMO
 			//invasion.atacar() ULTIMO
-		} //CAMBIO
+		} 
 		keyboard.a().onPressDo({self.setting()})
 	}
 	method setting(){

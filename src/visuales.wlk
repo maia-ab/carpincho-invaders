@@ -4,60 +4,35 @@ import juego.*
 import niveles.*
 import portadas.*
 
-//(1..13).forEach { x => toni.sembrar(new Maiz(position= game.at(x, 5)))}
-//const property posiciones = [8,14,20,26]
-//method aniadir(arb){arbustos.add(arb)}
-
-class Arbusto{
-	const property arbustos = []
+class Obstaculos{
+	const property obstaculos = []
 	var property vidas
-	var property image = "arb1.png"
-
+	var property image = "arbusto.png"
+	
 	method iniciar(){
-		game.addVisualIn(self, game.at(2,3))
-		game.onCollideDo(self, {x => self.recibirDisparoDe(x)})
+		self.aniadirGrupo(2,3)
+		self.aniadirGrupo(8,9)
+		self.aniadirGrupo(14,15)
+		self.aniadirGrupo(20,21)
+		self.aniadirGrupo(26,27)
+		game.onCollideDo(self, {x => self.recibirDisparoDe(x)}) 
+	}
+	method aniadirGrupo(uno,dos){
+		game.addVisualIn(new Obstaculos(vidas=vidas), game.at(uno,3))
+		game.addVisualIn(new Obstaculos(vidas=vidas), game.at(dos,3))
 	}
 	method recibirDisparoDe(personaje){
 		vidas -= 1
 		self.atacar()
 	}
 	method atacar(){
-		if(vidas == 24){image = "arb2.png"}
-	 	else if(vidas == 18){image = "arb3.png"}
-	 	else if(vidas == 12){image = "arb4.png"}
-	 	else if(vidas == 6){image = "arb5.png"}
-	 	else if(vidas == 1){image = "arb7.png"}
+		if(vidas == 12){image = "arb3.png"}
+	 	else if(vidas == 8){image = "arb4.png"}
+	 	else if(vidas == 4){image = "arb5.png"}
+	 	else if(vidas == 2){image = "arb6.png"}
 	 	else if(vidas == 0){game.removeVisual(self)}
 	}
 }
 
-object arbnivel1 inherits Arbusto(vidas = 30){
-	override method iniciar(){
-		super()	
-		game.addVisualIn(new Arbusto(vidas=30), game.at(8,3))
-		game.addVisualIn(new Arbusto(vidas=30), game.at(14,3))
-		game.addVisualIn(new Arbusto(vidas=30), game.at(20,3))
-		game.addVisualIn(new Arbusto(vidas=30), game.at(26,3)) 
-	}
-}
-
-/* 
-object arbnivel2 inherits Arbusto(vidas=10){
-	override method iniciar(){
-		super()
-		game.addVisualIn(new Arbusto(vidas=5), game.at(8,3))
-		game.addVisualIn(new Arbusto(vidas=5), game.at(14,3))
-		game.addVisualIn(new Arbusto(vidas=5), game.at(20,3))
-		game.addVisualIn(new Arbusto(vidas=5), game.at(26,3))
-	}
-}
-
-object arbnivel3 inherits Arbusto(vidas=5){
-	override method iniciar(){
-		super()
-		game.addVisualIn(new Arbusto(vidas=5), game.at(8,3))
-		game.addVisualIn(new Arbusto(vidas=5), game.at(14,3))
-		game.addVisualIn(new Arbusto(vidas=5), game.at(20,3))
-		game.addVisualIn(new Arbusto(vidas=5), game.at(26,3))
-	}
-}*/
+object arbNivel1 inherits Obstaculos(vidas=16){}
+object arbNivel2 inherits Obstaculos(vidas=10){}

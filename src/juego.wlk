@@ -24,13 +24,13 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "casa.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
+object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
 	var property vida1=new Vida(position=game.at(0,19))
 	var property vida2=new Vida(position=game.at(1,19))
 	var property vida3=new Vida(position=game.at(2,19))
 	var property cantidadDeDisparos = 1
 	override method disparar(dir){
-		const disp = new Disparo(position = self.position().up(1), image = "disparo.png", idDisparo = cantidadDeDisparos)
+		const disp = new Disparo(position = self.position().up(1), image = "mate.png", idDisparo = cantidadDeDisparos)
 		if(puedeDisparar){
 			disp.serDisparadoPor(self, dir)
 			puedeDisparar=false
@@ -148,9 +148,9 @@ object invasion{
 	}
 	method aniadir(invasor){invasores.add(invasor)}
 	method iniciarGrupo(){
-		self.colocarFilaDeEnemigos(18)
-		self.colocarFilaDeEnemigos(16)
-		self.colocarFilaDeEnemigos(14)
+		self.colocarFilaDeEnemigos(17)
+		self.colocarFilaDeEnemigos(15)
+		self.colocarFilaDeEnemigos(13)
 		invasores.forEach({x=>x.iniciar()})
 	}
 	method estaVacia() = invasores.isEmpty()
