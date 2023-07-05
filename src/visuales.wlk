@@ -8,6 +8,7 @@ class Obstaculos{
 	const property obstaculos = []
 	var property vidas
 	var property image = "arbusto.png"
+	var property position = 0
 	
 	method iniciar(){
 		//self.aniadirGrupo(2,3)
@@ -15,8 +16,8 @@ class Obstaculos{
 		game.onCollideDo(self, {x => self.recibirDisparoDe(x)}) 
 	}
 	method aniadirGrupo(uno,dos){
-		game.addVisualIn(new Obstaculos(vidas=vidas), game.at(uno,3))
-		game.addVisualIn(new Obstaculos(vidas=vidas), game.at(dos,3))
+		game.addVisual(new Obstaculos(position = game.at(uno, 3), vidas = vidas))
+		game.addVisual(new Obstaculos(position = game.at(dos, 3), vidas = vidas))
 	}
 	method recibirDisparoDe(personaje){
 		vidas -= 1

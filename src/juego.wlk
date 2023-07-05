@@ -40,27 +40,24 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		}
 	}
 	override method recibirDisparoDe(personaje){
-		if(vidas == 1){
+		if(vidas == 1) { 
 			game.removeVisual(vida1)
-			invasion.detenerAtaque()
-			game.removeVisual(self)
-			gameOver.ejecutar()
-			puedeDisparar=false
-					   
-		}else if(vidas == 2){
-			game.removeVisual(vida2)
-			vidas -=1
-			self.restarPuntos(100)
-			contador.actualizarPuntos()	
-			
-		}else{
-			game.removeVisual(vida3)
-			vidas -=1	
-			self.restarPuntos(100)
-			contador.actualizarPuntos()	
-					
+			self.perderJuego()
 		}
+		else if(vidas == 2) { game.removeVisual(vida2) }
+		else { game.removeVisual(vida3) }
+		self.restarPuntos(100)
+		contador.actualizarPuntos()
+		vidas -= 1.max(0)
 	}
+	
+	method perderJuego() {
+		invasion.detenerAtaque()
+		game.removeVisual(self)
+		gameOver.ejecutar()
+		puedeDisparar=false
+	}
+	
 	override method iniciar(){
 		super()
 		self.configurarAcciones()
@@ -123,7 +120,6 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 			if(invasion.invasores().size()-1 > 0){
 				jugador.sumarPuntos(20)
 				contador.actualizarPuntos()
-				
 			}else{
 				invasion.detenerAtaque()
 				invasion.invasores().remove(self)
@@ -140,23 +136,21 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	}
 	
 	method moverseEnGrupo(){
-		self.patrullarDerecha()
+		self.patrullar(derecha)
 		game.onTick(16500, "patrullar", {self.cambiarDireccion()})
 	}
-	method patrullarDerecha(){
-		game.onTick(1000,"Movimiento",{self.mover(derecha)})
+	method patrullar(dir){
+		game.onTick(1000,"Movimiento",{self.mover(dir)})
 	}
-	method patrullarIzquierda(){
-		game.onTick(1000,"Movimiento",{self.mover(izquierda)})
-	}
+	
 	method cambiarDireccion(){
 		self.dejarDeMover()
 		abajo.moverA(self)
 		if (direccion.equals(derecha)){
-			self.patrullarIzquierda()
+			self.patrullar(izquierda)
 			direccion=izquierda	
 		}
-		else {self.patrullarDerecha()
+		else {self.patrullar(derecha)
 			  direccion=derecha
 		}
 	}

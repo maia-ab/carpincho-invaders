@@ -15,17 +15,10 @@ class Nivel{
 		jugador.iniciar()
 		invasion.iniciarGrupo()
 		invasion.atacar()
+		if (self == nivel1) { arbNivel1.iniciar() }
+		else { arbNivel2.iniciar() }
 	}
 }
-object nivel1 inherits Nivel(image="nivel1.png", siguiente=nivel2){
-	override method iniciar(){
-		super()
-		arbNivel1.iniciar()
-	}
-}
-object nivel2 inherits Nivel(image="nivel2.png", siguiente=victoria){
-	override method iniciar(){
-		super()
-		arbNivel2.iniciar()
-	}
-}
+
+const nivel1 = new Nivel(image="nivel1.png", siguiente=nivel2)
+const nivel2 = new Nivel(image="nivel2.png", siguiente=victoria)

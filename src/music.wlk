@@ -18,5 +18,5 @@ object soundPrincipal inherits Music(music = game.sound("principal.mp3")){
 		music.shouldLoop(true)
 	}
 }
-object soundVictoria inherits Music(music = game.sound("victoria.mp3")){}
-object soundGameOver inherits Music(music = game.sound("gameOver.mp3")){}
+const soundVictoria  = new Music(music = game.sound("victoria.mp3"))
+const soundGameOver = new Music(music = game.sound("gameOver.mp3"))
