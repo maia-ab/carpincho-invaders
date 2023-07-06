@@ -20,15 +20,20 @@ class Obstaculos{
 		game.addVisual(new Obstaculos(position = game.at(dos, 3), vidas = vidas))
 	}
 	method recibirDisparoDe(personaje){
-		vidas -= 1
-		self.atacar()
+		if(vidas == 1){
+			game.removeVisual(self)
+		}else{
+			vidas -= 1
+			self.atacar()			
+		}
+
 	}
 	method atacar(){
-		if(vidas == 12){image = "arb3.png"} 
-	 	else if(vidas == 9){image = "arb4.png"}
-	 	else if(vidas == 6){image = "arb5.png"}
-	 	else if(vidas == 3){image = "arb6.png"}
-	 	else if(vidas == 0){game.removeVisual(self)}
+		var cont = 0
+		if (vidas%3 == 0){
+			cont += 1
+			image = "arbusto" + cont + ".png"
+		}
 	}
 }
 
