@@ -165,12 +165,10 @@ object contador{
 
 object invasion{
 	const property invasores = []
-	method enemigoRandom() = 0.randomUpTo(invasores.size()-1)
 	method disparoRandom(){
-		const enemigoQueDispare = invasores.get(self.enemigoRandom())
-		if(invasores.contains(enemigoQueDispare)){
-		enemigoQueDispare.disparar(abajo)}
+		invasores.anyOne().disparar(abajo)
 	}
+	
 	method atacar(){game.onTick(1200, "ataque", {self.disparoRandom()})}
 	method detenerAtaque(){game.removeTickEvent("ataque")}
 	method colocarFilaDeEnemigos(y){ 
