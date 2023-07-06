@@ -25,9 +25,6 @@ class Personaje{
 
 
 object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
-	var property vida1=new Vida(position=game.at(0,19))
-	var property vida2=new Vida(position=game.at(1,19))
-	var property vida3=new Vida(position=game.at(2,19))
 	var property cantidadDeDisparos = 1
 	var property puntosActuales=0
 	override method disparar(dir){
@@ -41,16 +38,16 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 	}
 	override method recibirDisparoDe(personaje){
 		if(vidas == 1) { 
-			game.removeVisual(vida1)
+			game.removeVisual(vida)
 			self.perderJuego()
 		}
-		else if(vidas == 2) { game.removeVisual(vida2) }
-		else { game.removeVisual(vida3) }
+		else{
+		vidas -= 1.max(0) 
+		vida.image("vidas" + vidas + ".png")
 		self.restarPuntos(100)
-		contador.actualizarPuntos()
-		vidas -= 1.max(0)
-	}
-	
+		contador.actualizarPuntos()}
+}
+
 	method perderJuego() {
 		invasion.detenerAtaque()
 		game.removeVisual(self)
@@ -92,17 +89,13 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		keyboard.space().onPressDo{self.disparar(arriba)}
 		
 	}
-	method mostrarVidas(){
-		game.addVisual(vida1)
-		game.addVisual(vida2)
-		game.addVisual(vida3)		
-	}
+	method mostrarVidas(){game.addVisual(vida)}
 	method mostrarContador(){game.addVisual(contador)}
 }
 
-class Vida{
-	var property position
-	var property image= "vida.png"
+object vida{
+	var property position = game.at(0,19)
+	var property image= "vidas3.png"
 	method recibirDisparoDe(personaje){}
 }
 
@@ -191,8 +184,8 @@ object invasion{
 	method aniadir(invasor){invasores.add(invasor)}
 	method iniciarGrupo(){
 		self.colocarFilaDeEnemigos(17)
-//		self.colocarFilaDeEnemigos(15)
-//		self.colocarFilaDeEnemigos(13)
+		self.colocarFilaDeEnemigos(15)
+		self.colocarFilaDeEnemigos(13)
 		invasores.forEach({x=>x.iniciar()})
 	}
 	method estaVacia() = invasores.isEmpty()

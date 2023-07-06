@@ -47,15 +47,3 @@ class GrupoArbustos inherits Obstaculos{
 	}	
 }
 
-/*object arbNivel1 inherits Obstaculos(vidas=15){
-
-}
-object arbNivel2 inherits Obstaculos(vidas=10){
-	override method iniciar(){
-		self.aniadirGrupo(2,3)
-		self.aniadirGrupo(8,9)
-		self.aniadirGrupo(14,15)
-		self.aniadirGrupo(20,21)
-		self.aniadirGrupo(26,27)
-	}
-}*/
