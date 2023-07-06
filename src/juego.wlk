@@ -191,8 +191,8 @@ object invasion{
 	method aniadir(invasor){invasores.add(invasor)}
 	method iniciarGrupo(){
 		self.colocarFilaDeEnemigos(17)
-		self.colocarFilaDeEnemigos(15)
-		self.colocarFilaDeEnemigos(13)
+//		self.colocarFilaDeEnemigos(15)
+//		self.colocarFilaDeEnemigos(13)
 		invasores.forEach({x=>x.iniciar()})
 	}
 	method estaVacia() = invasores.isEmpty()
