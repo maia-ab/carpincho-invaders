@@ -135,24 +135,19 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 		}
 	}
 	
-	method moverseEnGrupo(){
-		self.patrullar(derecha)
-		game.onTick(16500, "patrullar", {self.cambiarDireccion()})
+method moverseEnGrupo(){
+		self.patrullar(direccion)
+		game.onTick(16500, "patrullar", {self.cambiarDireccion() })
 	}
 	method patrullar(dir){
 		game.onTick(1000,"Movimiento",{self.mover(dir)})
 	}
-	
+
 	method cambiarDireccion(){
 		self.dejarDeMover()
 		abajo.moverA(self)
-		if (direccion.equals(derecha)){
-			self.patrullar(izquierda)
-			direccion=izquierda	
-		}
-		else {self.patrullar(derecha)
-			  direccion=derecha
-		}
+		direccion= direccion.opuesto()
+		self.patrullar(direccion)
 	}
 	method dejarDeMover(){
 		game.removeTickEvent("Movimiento")
@@ -164,12 +159,12 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	}
 }
 object contador{
-	var property text= "puntos: " + jugador.puntosActuales().toString()
-	var property position=game.at(28,18)
-	var property textColor= "#FFFFFF"
+	var property text= "PUNTOS: " + jugador.puntosActuales().toString()
+	var property position=game.at(26,18)
+	var property textColor= "#000000"
 	var property nivel=1
 	method actualizarPuntos(){
-		text="puntos: " + jugador.puntosActuales().toString()
+		text= "PUNTOS: " + jugador.puntosActuales().toString()
 	}
 	method recibirDisparoDe(personaje){}
 }
