@@ -14,6 +14,7 @@ class Nivel{
 	method iniciar(){
 		game.addVisualIn(self, game.at(0,0))
 		jugador.iniciar()
+		grupoVidas.iniciar()
 		invasion.iniciarGrupo()
 		invasion.atacar()
 		const arbustos = new GrupoArbustos(vidas = resistenciaArbustos)

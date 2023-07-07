@@ -38,12 +38,12 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 	}
 	override method recibirDisparoDe(personaje){
 		if(vidas == 1) { 
-			game.removeVisual(vida)
+			game.removeVisual(grupoVidas)
 			self.perderJuego()
 		}
 		else{
 		vidas -= 1.max(0) 
-		vida.image("vidas" + vidas + ".png")
+		grupoVidas.image("vidas" + vidas + ".png")
 		self.restarPuntos(100)
 		contador.actualizarPuntos()}
 }
@@ -58,7 +58,6 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 	override method iniciar(){
 		super()
 		self.configurarAcciones()
-		self.mostrarVidas()
 		self.mostrarContador()
 	}
 	override method mover(dir){
@@ -85,14 +84,14 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		keyboard.space().onPressDo{self.disparar(arriba)}
 		
 	}
-	method mostrarVidas(){game.addVisual(vida)}
 	method mostrarContador(){game.addVisual(contador)}
 }
 
-object vida{
+object grupoVidas{
 	var property position = game.at(0,19)
 	var property image= "vidas3.png"
 	method recibirDisparoDe(personaje){}
+	method iniciar(){game.addVisual(self)}
 }
 
 class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
