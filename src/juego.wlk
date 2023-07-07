@@ -72,11 +72,7 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		puntosActuales+=cant
 	}
 	method restarPuntos(cant){
-		if(puntosActuales>100){
-			puntosActuales-=100
-		}else{
-			puntosActuales=0
-		}
+		puntosActuales = 0.max(puntosActuales - cant)
 	}
 	method resetear(){
 		vidas=3
