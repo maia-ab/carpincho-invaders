@@ -45,7 +45,10 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		vidas -= 1.max(0) 
 		grupoVidas.image("vidas" + vidas + ".png")
 		self.restarPuntos(100)
-		contador.actualizarPuntos()}
+		contador.actualizarPuntos()
+		self.image("boy2.png")
+		game.schedule(200, {self.image("boy.png")})
+		}
 }
 
 	method perderJuego() {
