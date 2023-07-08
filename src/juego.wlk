@@ -9,7 +9,6 @@ class Personaje{
 	var property position = 0
 	var property image
 	var property vidas
-	var property velocidadDeDisparo
 	method iniciar(){game.addVisual(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())} 
 	method moverSi(dir, condicion){if(condicion){self.mover(dir)}}
@@ -23,7 +22,7 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 70){
+object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png"){
 	var property cantidadDeDisparos = 1
 	var property puntosActuales=0
 	var property nivelActual = 0
@@ -146,11 +145,7 @@ object invasion{
 	method atacar(){game.onTick(1200, "ataque", {self.disparoRandom()})}
 	method detenerAtaque(){game.removeTickEvent("ataque")}
 	method colocarFilaDeEnemigos(y){ 
-		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y), 
-			velocidadDeDisparo = 40,
-			idEnemigo = (x+y)
-		))}
-
+		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y), idEnemigo = (x+y)))}
 	}
 	method aniadir(invasor){invasores.add(invasor)}
 	method iniciarGrupo(){
@@ -235,7 +230,7 @@ class DisparoJugador inherits Disparo(image = "mate.png", direccion = arriba, ve
 	
 }
 
-class DisparoEnemigo inherits Disparo(image = "disparo2.png", direccion = abajo, velocidad = 25){
+class DisparoEnemigo inherits Disparo(image = "disparo2.png", direccion = abajo, velocidad = 20){
 	override method mover(dir){
 		if (self.puedeMoverA(dir)){
 			dir.moverA(self)
