@@ -58,9 +58,9 @@ object gameOver inherits Visual(image = "gameOver.png"){
 object siguienteNivel inherits Visual(image="sigNivel.png"){
 	override method ejecutar(){
 		super()
-		game.schedule(5000,{
+		game.schedule(2000,{
 			game.clear()
-			nivel2.iniciar()
+			jugador.nivelActual().siguiente().iniciar()
 		})
 	}
 }

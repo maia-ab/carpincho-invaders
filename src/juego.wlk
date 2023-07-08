@@ -10,7 +10,6 @@ class Personaje{
 	var property image
 	var property vidas
 	var property velocidadDeDisparo
-	var property direccionDeDisparo
 	method iniciar(){game.addVisual(self)}
 	method colocarEn(pos){position = game.at(pos.x(), pos.y())} 
 	method moverSi(dir, condicion){if(condicion){self.mover(dir)}}
@@ -24,19 +23,21 @@ class Personaje{
 }
 
 
-object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 80, direccionDeDisparo = arriba){
+object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "boy.png", velocidadDeDisparo = 70){
 	var property cantidadDeDisparos = 1
 	var property puntosActuales=0
+	var property nivelActual = 0
 	override method disparar(dir){
-		const disp = new Disparo(position = self.position().up(1), image = "mate.png", idDisparo = cantidadDeDisparos)
+		const disp = new DisparoJugador(position = self.position().up(1), idDisparo = cantidadDeDisparos)
 		if(puedeDisparar){
-			disp.serDisparadoPor(self, dir)
+			disp.serDisparado()
 			puedeDisparar=false
 			game.schedule(1500,{puedeDisparar=true})
 			cantidadDeDisparos += 1
 		}
 	}
-	override method recibirDisparoDe(personaje){
+	method recibirDisparo(){}
+	method recibirDisparoEnemigo(){
 		if(vidas == 1) { 
 			game.removeVisual(grupoVidas)
 			self.perderJuego()
@@ -59,6 +60,7 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		super()
 		self.configurarAcciones()
 		self.mostrarContador()
+		game.onCollideDo(self, {x => x.detenerDisparo()})
 	}
 	override method mover(dir){
 		if (dir.puedeMoverse(self)){
@@ -73,10 +75,6 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 	method restarPuntos(cant){
 		puntosActuales = 0.max(puntosActuales - cant)
 	}
-	method resetear(){
-		vidas=3
-		puntosActuales=0
-	}
 	
 	method configurarAcciones(){
 		keyboard.left().onPressDo{self.mover(izquierda)}
@@ -84,15 +82,14 @@ object jugador inherits Personaje(vidas = 3, position = game.at(5,0), image = "b
 		keyboard.space().onPressDo{self.disparar(arriba)}
 		
 	}
+	method pasarNivel(){
+		nivelActual.pasarNivel()
+	    nivelActual = nivelActual.siguiente()
+		vidas = 3		
+	}
 	method mostrarContador(){game.addVisual(contador)}
 }
 
-object grupoVidas{
-	var property position = game.at(0,19)
-	var property image= "vidas3.png"
-	method recibirDisparoDe(personaje){}
-	method iniciar(){game.addVisual(self)}
-}
 
 class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	var property direccion = derecha
@@ -101,27 +98,18 @@ class Enemigo inherits Personaje (vidas = 1, image = "carpincho45.png"){
 	override method iniciar(){
 		super()
 		self.moverseEnGrupo()
+		game.onCollideDo(self, {x => x.recibirDisparoEnemigo()
+			
+		})
 	}
-	override method recibirDisparoDe(personaje){
-		if (personaje.equals(jugador)){
-			game.removeVisual(self)
-			if(invasion.invasores().size()-1 > 0){
-				jugador.sumarPuntos(20)
-				contador.actualizarPuntos()
-			}else{
-				invasion.detenerAtaque()
-				invasion.invasores().remove(self)
-				if(contador.nivel()==1){
-					siguienteNivel.ejecutar()
-					jugador.resetear()
-					contador.nivel(2)
-					}else{
-						victoria.ejecutar()
-					}
-			}
-		invasion.invasores().remove(self)
-		}
+	method recibirDisparo(){
+		jugador.sumarPuntos(20)
+		contador.actualizarPuntos()
+		invasion.eliminarInvasor(self)
+		game.removeVisual(self)
 	}
+	method recibirDisparoEnemigo(){}
+
 	
 method moverseEnGrupo(){
 		self.patrullar(direccion)
@@ -141,21 +129,12 @@ method moverseEnGrupo(){
 		game.removeTickEvent("Movimiento")
 	}
 	override method disparar(dir){
-		const disp = new Disparo(position = self.position().down(1), image = "disparo2.png", idDisparo = "enem" + idEnemigo + cantidadDeDisparos)
-		disp.serDisparadoPor(self, dir)
+		const dispEn = new DisparoEnemigo(position = self.position().down(1), idDisparo = "enem" + idEnemigo + cantidadDeDisparos)
+		dispEn.serDisparado()
 		cantidadDeDisparos += 1
 	}
 }
-object contador{
-	var property text= "PUNTOS: " + jugador.puntosActuales().toString()
-	var property position=game.at(26,18)
-	var property textColor= "#000000"
-	var property nivel=1
-	method actualizarPuntos(){
-		text= "PUNTOS: " + jugador.puntosActuales().toString()
-	}
-	method recibirDisparoDe(personaje){}
-}
+
 
 
 object invasion{
@@ -169,57 +148,119 @@ object invasion{
 	method colocarFilaDeEnemigos(y){ 
 		(1..12).forEach{x => self.aniadir(new Enemigo(position = game.at(x, y), 
 			velocidadDeDisparo = 40,
-			direccionDeDisparo = abajo, 
 			idEnemigo = (x+y)
 		))}
 
 	}
 	method aniadir(invasor){invasores.add(invasor)}
 	method iniciarGrupo(){
-		self.colocarFilaDeEnemigos(17)
-		self.colocarFilaDeEnemigos(15)
+		//self.colocarFilaDeEnemigos(17)
+		//self.colocarFilaDeEnemigos(15)
 		self.colocarFilaDeEnemigos(13)
 		invasores.forEach({x=>x.iniciar()})
 	}
-	method estaVacia() = invasores.isEmpty()
-}
-
-class Disparo{
-	var property image 
-	var property position 
-	var property idDisparo
-	method puedeMoverA(dir) = dir.puedeMoverse(self)
-	method mover(dir){
-	if (self.puedeMoverA(dir)){
-			dir.moverA(self)
+	method eliminarInvasor(invasor){
+		if (invasores.size()-1 > 0){
+			invasores.remove(invasor)		
 		}else{
-			self.detenerDisparo(dir)
+			invasores.clear()
+			self.detenerAtaque()
+			jugador.pasarNivel()			
 		}
-	}
-	method colocarEn(pos){position = game.at(pos.x(), pos.y())}
-	method detenerDisparo(dir){
-		game.removeVisual(self)
-		game.removeTickEvent("desplazar" + dir + idDisparo)
-	}
-	method serDisparadoPor(personaje, dir){
-		game.addVisual(self)
-		game.onTick(personaje.velocidadDeDisparo(), "desplazar" + dir + idDisparo, {self.mover(dir)})
-		game.onCollideDo(self, {
-		    	x => if(not(invasion.invasores().contains(x))or personaje.equals(jugador)){
-		    		x.recibirDisparoDe(personaje)
-		    		self.detenerDisparo(dir)
-		    	}else{
-		    		x.recibirDisparoDe(personaje)
-		    	}
-		    	
-		   })
-	}
-	method recibirDisparoDe(personaje){
-		self.detenerDisparo(personaje.direccionDeDisparo().opuesto())
 	}
 	
 }
 
+//VIDAS
+object grupoVidas{
+	var property position = game.at(0,19)
+	var property image = "vidas" + jugador.vidas() + ".png"
+	method recibirDisparoDe(personaje){}
+	method iniciar(){game.addVisual(self)}
+	method resetear(){image = "vidas3.png"}
+}
+
+//CONTADOR
+object contador{
+	var property text= "PUNTOS: " + jugador.puntosActuales().toString()
+	var property position=game.at(26,18)
+	var property textColor= "#FFFFFF"
+	method actualizarPuntos(){
+		text= "PUNTOS: " + jugador.puntosActuales().toString()
+	}
+	method resetear(){
+		jugador.puntosActuales(0)
+		self.actualizarPuntos()
+	}
+	method recibirDisparoDe(personaje){}
+}
+
+//DISPAROS
+class Disparo{
+	var property image 
+	var property position 
+	var property idDisparo
+	var property direccion
+	var property velocidad
+	method puedeMoverA(dir) = dir.puedeMoverse(self)
+	method mover(dir)
+	method detenerDisparo(){}
+	method detenerDisparoEnemigo(){}
+	method recibirDisparo(){}
+	method recibirDisparoEnemigo(){}
+	method serDisparado(){
+		game.addVisual(self)
+		game.onTick(velocidad, "desplazar" + direccion + idDisparo, {self.mover(direccion)})		
+	}
+}
+
+class DisparoJugador inherits Disparo(image = "mate.png", direccion = arriba, velocidad = 80){
+	override method mover(dir){
+		if (self.puedeMoverA(dir)){
+			dir.moverA(self)
+		}else{
+			self.detenerDisparo()
+		}		
+	}
+	override method serDisparado(){
+	    super()
+		game.onCollideDo(self, {x => x.recibirDisparo()
+			self.detenerDisparo()   
+		})
+	}
+	override method detenerDisparo(){
+		game.removeVisual(self)
+		game.removeTickEvent("desplazar" + direccion + idDisparo)
+	}
+	
+}
+
+class DisparoEnemigo inherits Disparo(image = "disparo2.png", direccion = abajo, velocidad = 25){
+	override method mover(dir){
+		if (self.puedeMoverA(dir)){
+			dir.moverA(self)
+		}else{
+			self.detenerDisparoEnemigo()
+		}		
+	}
+	override method serDisparado(){
+		super()
+		game.onCollideDo(self, {x => x.recibirDisparoEnemigo()})
+	}
+	override method recibirDisparo(){
+		self.detenerDisparo()
+	}
+	override method detenerDisparoEnemigo(){
+		game.removeVisual(self)
+		game.removeTickEvent("desplazar" + direccion + idDisparo)
+		
+	} 
+	
+	
+}
+
+
+//DIRECCIONES
 
 object arriba{
 	method puedeMoverse(personaje) = personaje.position().y()+1 < game.height()
