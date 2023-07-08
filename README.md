@@ -31,6 +31,11 @@ El juego se desarrolla en 2 niveles principales donde Tony tiene que defender su
 A medida que avancen los niveles la dificultad será aún mayor, los obstáculos para la invasión serán cada vez menos resistentes y el ataque más rápido. 
 Si Tony pierde las vidas o no logras acabar con la invasión antes de tiempo pierdes la partida.
 
+## PUNTAJES:
+Las condiciones para el puntaje son las siguientes:
+- Disparar a un carpincho → suma 20 puntos
+- Perder una vida → resta 100 puntos
+
 ## NIVELES:
 **Nivel 1 Jardín:** :sunny: 
 ¡Comenzó la invasión! A jugar
