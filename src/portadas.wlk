@@ -7,7 +7,9 @@ import visuales.*
 class Visual{
 	var property position = game.at(0,0)
 	var property image
-	method ejecutar(){game.addVisual(self)}
+	method ejecutar(){
+		game.addVisual(self)
+	}
 	method remover(){game.removeVisual(self)}
 }
 

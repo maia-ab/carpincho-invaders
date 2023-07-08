@@ -209,7 +209,8 @@ class Disparo{
 	}
 }
 
-class DisparoJugador inherits Disparo(image = "mate.png", direccion = arriba, velocidad = 80){
+//80
+class DisparoJugador inherits Disparo(image = "mate.png", direccion = arriba, velocidad = 60){
 	override method mover(dir){
 		if (self.puedeMoverA(dir)){
 			dir.moverA(self)
