@@ -60,7 +60,7 @@ object siguienteNivel inherits Visual(image="sigNivel.png"){
 		super()
 		game.schedule(2000,{
 			game.clear()
-			jugador.nivelActual().siguiente().iniciar()
+			jugador.nivelActual().iniciar()
 		})
 	}
 }
