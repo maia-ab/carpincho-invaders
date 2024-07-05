@@ -7,10 +7,7 @@
 ## Equipo de desarrollo
 
 - [Maia Barrionuevo](https://github.com/maia-ab)
-- [Juan Manuel Britez](https://github.com/Juanmabritez)
 - [Elizabeth Albornoz](https://github.com/elielizabeth)
-- [Martin Orsingher](https://github.com/Martin-Orsingher)
-- [Sebastian Di Tucci](https://github.com/sebastianditucci)
 
 ## INTRODUCCIÓN:
 Inspirado en Space Invaders, Carpinchos Invaders es un juego de estrategia basado en diferentes rondas de niveles cada vez más complejos. El objetivo principal es evitar la invasión de los carpinchos hacia la casa de Tony. :boy: 
